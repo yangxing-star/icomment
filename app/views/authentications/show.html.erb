@@ -1,0 +1,46 @@
+<html>
+  <head>
+    <title>用户登录</title>
+    <script type="text/javascript">
+      $(function(){
+        checkSession();
+        function checkSession(){
+          $.ajax({
+            url:'/users/check_session.json',
+            type:'get',
+            success:function(data){
+              if(data.success){
+                //$('#mark').css("visibility", "visible");
+              }else{
+                //$('#signup').css("visibility", "visible");
+                //$('#login').focus();
+              }
+            },
+            error:function(msg){
+              flag = false;
+              alert("请求错误: "+msg.statusText);
+            }
+          });
+        };
+      });
+    </script>
+  </head>
+  <body>
+    <div style="width:300px;height:400px;position:absolute;top:50%;margin-top:-200px;left:50%;margin-left:-120px">
+      <%= form_tag("/sign_in", :remote => true, :method => "post", :id => "login_form") do %>
+        <h5>请输入帐号和密码</h5>
+        <p>
+          <label for="login">用户名:</label>
+          <input type="text" name="authentication[login]">
+        </p>
+        <p>
+          <label for="password" style="margin-left:16px">密码:</label>
+          <input type="password" name="authentication[password]" id="password">
+        </p>
+        <p>
+          <button id="submit" style="width:100px;height:30px;margin-left:60px;">登录</button>
+        </p>
+      <% end %>
+    </div>
+  </body>
+</html>

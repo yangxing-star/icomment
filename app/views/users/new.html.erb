@@ -1,0 +1,84 @@
+<html>
+  <head>
+    <title>用户注册</title>
+    <style type="text/css">
+      .info{
+        float: right;
+        margin-top: -170px;
+      }
+      .login_info{
+        background:url(/assets/error.png) no-repeat; 
+      }
+    </style>
+    <script type="text/javascript">
+      $(function(){
+        function signup_login_check(){
+          var login = $("#login").val();
+          $.ajax({
+            url:'/users/signup_login_check.json',
+            data:{
+              'login': login
+            },
+            type:'get',
+            success:function(data){
+              if(data.success){
+                $('#login_info').attr("src", "/assets/ok.png");
+                $('.error_text').css("margin-right", "0px");
+                $('.error_text').text(data.msg);
+              }else{
+                $('#login_info').attr("src", "/assets/error.png");
+                $('.error_text').css("margin-right", "60px");
+                $('.error_text').text(data.msg);
+              }
+            },
+            error:function(msg){
+              flag = false;
+              alert("请求错误: "+msg.statusText);
+            }
+          });
+        }
+
+        $("#login").blur(function(){
+          signup_login_check();
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <div style="width:410px;height:400px;position:absolute;top:50%;margin-top:-200px;left:50%;margin-left:-120px">
+      <%= form_tag("/users", :method => "post") do %>
+        <p>
+          <label for="login" style="margin-left:15px;">用户名:</label>
+          <input type="text" name="user[login]" id="login">
+        </p>
+        <p>
+          <label for="password" style="margin-left:32px;">密码:</label>
+          <input type="password" name="user[password]" id="password">
+        </p>
+        <p>
+          <label for="password_confirmation">确认密码:</label>
+          <input type="password" name="user[password_confirmation]" id="password_confirmation">
+        </p>
+        <p>
+          <button id="submit" style="width:100px;height:30px;margin-left:80px;">注册</button>
+        </p>
+      <% end %>
+      <table class="info">
+        <tr>
+          <td>
+            <img id="login_info" style="margin-right:0px;"></img>
+          </td>
+          <td>
+            <span class="error_text" style="font-size:12px;"></span>
+          </td>
+        </tr>
+        <tr>
+          <td id="password"></td>
+        </tr>
+        <tr>
+          <td id="again_pwd"></td>
+        </tr>
+      </table>
+    </div>
+  </body>
+</html>
